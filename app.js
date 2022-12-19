@@ -17,12 +17,14 @@ const movieHandlers = require("./movieHandlers");
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 app.post("/api/movies", movieHandlers.postMovie);
+app.put("api/movies", movieHandlers.updateMovie);
 
 const usersHandler = require("./usersHandler");
 
 app.get("/api/users", usersHandler.getUsers);
 app.get("/api/users/:id", usersHandler.getUserById);
 app.post("/api/users", usersHandler.postUser);
+app.put("api/users", usersHandler.updateUser);
 
 app.listen(port, (err) => {
   if (err) {
