@@ -25,8 +25,23 @@ const users = [
 ];
 
 const getUsers = (req, res) => {
+  let queryUserFilter;
+  let sqlUserValues = [];
+  if (req.query.language && req.query.city) {
+    sqlUserValues.push(req.query.language, req.query.city);
+    queryUserFilter = "select * from users where language = ? and city = ?";
+  } else if (req.query.language) {
+    sqlUserValues.push(req.query.language);
+    queryUserFilter = "select * from users where language = ?";
+  } else if (req.query.city) {
+    sqlUserValues.push(req.query.city);
+    queryUserFilter = "select * from users where city = ?";
+  } else {
+    queryUserFilter = "select * from users";
+  }
+
   database
-    .query("select * from users")
+    .query(queryUserFilter, sqlUserValues)
     .then(([users]) => {
       res.json(users);
     })
@@ -41,8 +56,8 @@ const getUserById = (req, res) => {
 
   const user = users.find((user) => user.id === id);
 
-  if (users != null) {
-    res.json(users);
+  if (user != null) {
+    res.json(user);
   } else {
     res.status(404).send("Not Found");
   }
